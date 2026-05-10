@@ -1,0 +1,15 @@
+{
+  "business_name": "Portal de Impresion",
+  "upload_dir": "uploads",
+  "max_upload_mb": 64,
+  "network": {
+    "listen_address": ":8080",
+    "portal_base_url": "http://192.168.137.1:8080",
+    "portal_port": 8080,
+    "hotspot_subnet": "192.168.137.0/24",
+    "activation_mode": "manual",
+    "access_duration_minutes": 15,
+    "firewall_enabled": true,
+    "firewall_rule_prefix": "PrintPortal"
+  }
+}

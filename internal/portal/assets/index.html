@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{.BusinessName}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="mobile-shell">
+    <section class="phone-card">
+      <header class="identity-block">
+        <div class="emoji-orb" aria-hidden="true">
+          <span id="petEmoji">🐾</span>
+        </div>
+        <div class="identity-copy">
+          <h1 id="petName">Buscando tu animal</h1>
+          <button id="changeAnimalBtn" class="eyebrow-button" type="button">Cambiar animal</button>
+        </div>
+      </header>
+
+      <section class="upload-block" aria-labelledby="uploadTitle">
+        <div class="section-copy">
+          <h2 id="uploadTitle">Subir archivo</h2>
+        </div>
+
+        <input id="fileInput" name="file" type="file" hidden>
+        <button id="selectFileBtn" class="primary-button" type="button">Seleccionar archivo</button>
+
+        <div class="progress-shell" id="progressShell" aria-live="polite" hidden>
+          <div class="progress-bar">
+            <div id="progressBar" class="progress-bar-fill"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="files-block" aria-labelledby="filesTitle">
+        <div class="section-copy compact">
+          <h2 id="filesTitle">Archivos anteriores</h2>
+          <p class="section-note">Se eliminaran automaticamente en 30 dias.</p>
+        </div>
+        <ul class="upload-list" id="uploadList"></ul>
+        <p class="empty-state" id="emptyUploads">Todavia no hay archivos en tu carpeta.</p>
+      </section>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="deleteModal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle" aria-describedby="deleteModalMessage">
+      <h2 id="deleteModalTitle">Eliminar archivo</h2>
+      <p id="deleteModalMessage" class="modal-copy"></p>
+      <div class="modal-actions">
+        <button id="cancelDeleteBtn" class="secondary-button" type="button">Cancelar</button>
+        <button id="confirmDeleteBtn" class="danger-button" type="button">Eliminar archivo</button>
+      </div>
+    </div>
+  </div>
+
+  <script id="portal-config" type="application/json">{{.ConfigJSON}}</script>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
