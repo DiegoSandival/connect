@@ -140,6 +140,8 @@ h2 {
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid var(--line);
   padding: 14px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .section-copy {
@@ -181,6 +183,37 @@ h2 {
 
 .progress-shell {
   margin-top: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 247, 238, 0.92);
+  border: 1px solid rgba(210, 100, 42, 0.14);
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.progress-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+#progressTitle {
+  min-width: 0;
+  flex: 1 1 180px;
+  overflow-wrap: anywhere;
+}
+
+.progress-meta {
+  min-width: 0;
+  flex: 0 1 140px;
+  font-size: 0.84rem;
+  color: var(--muted);
+  text-align: right;
+  overflow-wrap: anywhere;
 }
 
 .progress-bar {
@@ -199,8 +232,90 @@ h2 {
   transition: width 120ms linear;
 }
 
+.overall-progress-bar {
+  height: 16px;
+}
+
 .progress-shell[hidden] {
 	display: none;
+}
+
+.progress-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.progress-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.progress-list::-webkit-scrollbar-thumb {
+  background: rgba(141, 63, 28, 0.28);
+  border-radius: 999px;
+}
+
+.progress-item {
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(35, 24, 15, 0.08);
+  display: grid;
+  gap: 8px;
+}
+
+.progress-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.progress-item-name {
+  min-width: 0;
+  flex: 1 1 180px;
+  font-size: 0.94rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.progress-item-state {
+  flex: 0 0 auto;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.progress-item-meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.progress-item-bar {
+  height: 10px;
+}
+
+.progress-item[data-status="done"] .progress-item-state {
+  color: #2b7a35;
+}
+
+.progress-item[data-status="done"] .progress-bar-fill {
+  background: linear-gradient(90deg, #49a75d, #8cd17d);
+}
+
+.progress-item[data-status="error"] .progress-item-state {
+  color: #bf3f2d;
+}
+
+.progress-item[data-status="error"] .progress-bar-fill {
+  background: linear-gradient(90deg, #bf3f2d, #f18972);
 }
 
 .upload-list {

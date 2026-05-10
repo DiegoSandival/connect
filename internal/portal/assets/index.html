@@ -25,15 +25,21 @@
       <section class="upload-block" aria-labelledby="uploadTitle">
         <div class="section-copy">
           <h2 id="uploadTitle">Subir archivo</h2>
+          <p class="section-note">En iPhone, si Fotos muestra "preparando", prueba abrir el archivo desde Archivos para enviar el original mas rapido.</p>
         </div>
 
-        <input id="fileInput" name="file" type="file" hidden>
-        <button id="selectFileBtn" class="primary-button" type="button">Seleccionar archivo</button>
+        <input id="fileInput" name="file" type="file" multiple hidden>
+        <button id="selectFileBtn" class="primary-button" type="button">Seleccionar archivos</button>
 
         <div class="progress-shell" id="progressShell" aria-live="polite" hidden>
-          <div class="progress-bar">
+          <div class="progress-head">
+            <strong id="progressTitle">Preparando archivos</strong>
+            <span id="progressMeta" class="progress-meta">0 archivos</span>
+          </div>
+          <div class="progress-bar overall-progress-bar">
             <div id="progressBar" class="progress-bar-fill"></div>
           </div>
+          <ul id="progressList" class="progress-list"></ul>
         </div>
       </section>
 

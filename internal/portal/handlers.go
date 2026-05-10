@@ -24,6 +24,7 @@ import (
 var macPattern = regexp.MustCompile(`(?i)([0-9a-f]{2}[-:]){5}[0-9a-f]{2}`)
 
 const sessionCookieName = "portal_session"
+const uploadFormMemory int64 = 32 << 20
 
 type Server struct {
 	cfg        config.Config
@@ -222,16 +223,15 @@ func (s *Server) handleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.Body = http.MaxBytesReader(w, r.Body, s.uploads.MaxBytes())
-	if err := r.ParseMultipartForm(s.uploads.MaxBytes()); err != nil {
+	if err := r.ParseMultipartForm(uploadFormMemory); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]any{
-			"error": fmt.Sprintf("el archivo excede el limite de %d MB", s.cfg.MaxUploadMB),
+			"error": "no se pudieron procesar los archivos seleccionados",
 		})
 		return
 	}
 
-	file, header, err := r.FormFile("file")
-	if err != nil {
+	files := r.MultipartForm.File["file"]
+	if len(files) == 0 {
 		writeJSON(w, http.StatusBadRequest, map[string]any{"error": "selecciona un archivo valido"})
 		return
 	}
@@ -244,15 +244,26 @@ func (s *Server) handleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.writeSessionCookie(w, snapshot.ID)
-	saved, err := s.uploads.Save(file, header, client.IP, snapshot.Animal)
-	if err != nil {
-		s.logger.Error("save upload", "ip", client.IP, "error", err)
-		writeJSON(w, http.StatusInternalServerError, map[string]any{"error": "no se pudo guardar el archivo"})
-		return
+	savedUploads := make([]uploads.SavedUpload, 0, len(files))
+	for _, header := range files {
+		file, err := header.Open()
+		if err != nil {
+			s.logger.Error("open upload", "ip", client.IP, "file", header.Filename, "error", err)
+			writeJSON(w, http.StatusInternalServerError, map[string]any{"error": "no se pudo leer uno de los archivos"})
+			return
+		}
+
+		saved, err := s.uploads.Save(file, header, client.IP, snapshot.Animal)
+		if err != nil {
+			s.logger.Error("save upload", "ip", client.IP, "file", header.Filename, "error", err)
+			writeJSON(w, http.StatusInternalServerError, map[string]any{"error": "no se pudo guardar uno de los archivos"})
+			return
+		}
+		savedUploads = append(savedUploads, saved)
 	}
 
 	s.snapshotUpload(client)
-	writeJSON(w, http.StatusOK, saved)
+	writeJSON(w, http.StatusOK, savedUploads)
 }
 
 func (s *Server) handleClientUploads(w http.ResponseWriter, r *http.Request) {
