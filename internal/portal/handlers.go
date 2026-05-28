@@ -198,8 +198,8 @@ func (s *Server) handleAccess(w http.ResponseWriter, r *http.Request) {
 	snapshot, err := s.sessions.Activate(r.Context(), client)
 	if err != nil {
 		s.logger.Error("activate access", "ip", client.IP, "error", err)
-		fallback, ensureErr := s.sessions.Ensure(client)
-		if ensureErr != nil {
+		fallback, fallbackErr := s.sessions.Ensure(client)
+		if fallbackErr != nil {
 			fallback = sessions.Snapshot{}
 		}
 		writeJSON(w, http.StatusServiceUnavailable, map[string]any{

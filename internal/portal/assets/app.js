@@ -62,6 +62,38 @@ async function changeAnimal() {
   changeAnimalBtn.textContent = 'Cambiar animal';
 }
 
+async function activateAccess() {
+  if (unlockInProgress) {
+    return;
+  }
+
+  unlockInProgress = true;
+  unlockButton.disabled = true;
+  unlockButton.textContent = 'Activando...';
+
+  try {
+    const response = await fetch('/api/access', {
+      method: 'POST',
+      cache: 'no-store',
+    });
+    const payload = await response.json();
+
+    if (!response.ok) {
+      throw new Error(payload?.error || 'No se pudo activar internet temporal');
+    }
+
+    unlockInProgress = false;
+    paintIdentity(payload);
+    paintNetwork(payload);
+    return;
+  } catch (error) {
+    unlockInProgress = false;
+    await fetchAd();
+    unlockHint.textContent = error.message || 'No se pudo activar internet temporal.';
+    return;
+  }
+}
+
 function resetProgress() {
   progressBar.style.width = '0%';
 }
